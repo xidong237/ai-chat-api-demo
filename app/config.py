@@ -38,7 +38,28 @@ class Settings(BaseSettings):
     def is_development(self) -> bool:
         return self.environment == "development"
 
+    @property
+    def available_models(self) -> list[dict]:
+        """返回当前已配置的可用模型列表"""
+        models = []
+        if self.deepseek_api_key:
+            models.append({
+                "id": "deepseek",
+                "name": "DeepSeek-V4-flash",
+                "provider": "DeepSeek",
+                "description": "高性价比通用模型，中文能力强",
+            })
+        if self.openai_api_key:
+            models.append({
+                "id": "openai",
+                "name": self.openai_model,
+                "provider": "OpenAI",
+                "description": "综合能力最强的模型之一",
+            })
+        return models
 
-s = Settings()
 
-print(s.is_development)
+# 全局单例——用 lru_cache 保证只初始化一次
+@lru_cache()
+def get_settings() -> Settings:
+    return Settings()
