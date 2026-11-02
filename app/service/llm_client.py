@@ -2,7 +2,7 @@
 from openai import OpenAI
 from app.config import get_settings
 import structlog
-from models.schemas import ChatRequest
+from app.models.schemas import ChatRequest
 
 logger = structlog.get_logger()
 

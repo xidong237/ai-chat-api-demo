@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     port: int = 8000
 
     # ===== DeepSeek 配置 =====
-    deepseek_api_key: str = ""
+    deepseek_api_key: str = "sk-123"
     deepseek_base_url: str = "https//api.deepseek.com"
     deepseek_model: str = "deepseek-v4-flash"
 

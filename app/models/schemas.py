@@ -4,34 +4,47 @@ from typing import Literal
 from datetime import datetime
 
 # ===== 聊天相关 =====
-class ChatMesssage(BaseModel):
+class ChatMessage(BaseModel):
     """一条聊天消息"""
     role: Literal["system", "user", "assistant"] = Field(..., description="消息角色")
     content: str = Field(..., min_length=1, description="消息内容")
 
 class ChatRequest(BaseModel):
     """POST /chat 的请求体"""
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid",
+                              json_schema_extra = {
+                                          "example": {
+                                              "model": "deepseek",
+                                              "messages": [
+                                                  {"role": "system", "content": "你是 Python 编程助手"},
+                                                  {"role": "user", "content": "写一个冒泡排序"},
+                                              ],
+                                              "temperature": 0.7,
+                                              "max_tokens": 4096,
+                                              "stream": False,
+                                          }
+                                      })  # 拒绝额外的未知字段
 
-    model: str = Field(default="deepseek", description="模型ID: 'deepseek' 或 'openai'")
-    messages: list[ChatMesssage] = Field(..., min_length=1, max_length=50, description="对话消息列表, 至少1条, 最多50条")
-    temperature: float = Field(default=0.7, ge=0.0, le=2.0,description="随机性: 0=最保守, 1=平衡, 2=最冒险")
-    max_tokens: int = Field(default=4096, ge=1, le=16384, description="最大返回 Token 数")
-    stream: bool = Field(default=False, description="是否使用流式输出(SSE)")
-
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "model": "deepseek",
-                "messages": [
-                    {"role": "system", "content": "你是python编程助手"},
-                    {"role": "user", "content": "写一个冒泡排序"}
-                ],
-                "temperature": 0.7,
-                "max_tokens": 4096,
-                "stream": False
-            }
-        }
+    model: str = Field(
+        default="deepseek",
+        description="模型 ID: 'deepseek' 或 'openai'"
+    )
+    messages: list[ChatMessage] = Field(
+        ..., min_length=1, max_length=50,
+        description="对话消息列表，至少 1 条，最多 50 条"
+    )
+    temperature: float = Field(
+        default=0.7, ge=0.0, le=2.0,
+        description="随机性: 0=最保守, 1=平衡, 2=最冒险"
+    )
+    max_tokens: int = Field(
+        default=4096, ge=1, le=16384,
+        description="最大返回 Token 数"
+    )
+    stream: bool = Field(
+        default=False,
+        description="是否使用流式输出(SSE)"
+    )
 
 class ChatResponse(BaseModel):
     """POST /chat 的响应体"""
