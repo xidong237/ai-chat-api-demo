@@ -15,13 +15,13 @@ class Settings(BaseSettings):
     port: int = 8000
 
     # ===== DeepSeek 配置 =====
-    deepseek_api_key: str = "sk-123"
-    deepseek_base_url: str = "https//api.deepseek.com"
+    DEEPSEEK_API_KEY: str = "sk-123"
+    DEEPSEEK_BASE_URL: str = "https//api.deepseek.com"
     deepseek_model: str = "deepseek-v4-flash"
 
     # ===== OpenAI 配置 =====
-    openai_api_key: str = ""
-    openai_base_url: str = "https://api.openai.com/v1"
+    OPENAI_API_KEY: str = ""
+    OPENAI_BASE_URL: str = "https://api.openai.com/v1"
     openai_model: str = "gpt-5.6-luna"
 
     # ===== 服务限制 =====
@@ -42,14 +42,14 @@ class Settings(BaseSettings):
     def available_models(self) -> list[dict]:
         """返回当前已配置的可用模型列表"""
         models = []
-        if self.deepseek_api_key:
+        if self.DEEPSEEK_API_KEY:
             models.append({
                 "id": "deepseek",
                 "name": "DeepSeek-V4-flash",
                 "provider": "DeepSeek",
                 "description": "高性价比通用模型，中文能力强",
             })
-        if self.openai_api_key:
+        if self.OPENAI_API_KEY:
             models.append({
                 "id": "openai",
                 "name": self.openai_model,

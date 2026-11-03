@@ -29,16 +29,16 @@ class LLMClient:
 
         self._clients: dict[str, OpenAI] = {}
 
-        if self.settings.deepseek_api_key:
+        if self.settings.DEEPSEEK_API_KEY:
             self._clients["deepseek"] = OpenAI(
-                api_key=self.settings.deepseek_api_key,
-                base_url=self.settings.deepseek_api_key
+                api_key=self.settings.DEEPSEEK_API_KEY,
+                base_url=self.settings.DEEPSEEK_BASE_URL
             )
 
-        if self.settings.openai_api_key:
+        if self.settings.OPENAI_API_KEY:
             self._clients["openai"] = OpenAI(
-                api_key=self.settings.openai_api_key,
-                base_url=self.settings.openai_base_url,
+                api_key=self.settings.OPENAI_API_KEY,
+                base_url=self.settings.OPENAI_BASE_URL,
             )
 
         if not self._clients:
